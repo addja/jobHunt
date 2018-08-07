@@ -43,14 +43,22 @@ class linkedList {
     void insert(int pos, T elem) {
       node* newn = new node;
       newn->elem = elem;
-      pos = min(pos,size);
-      size++;
-      node * n = head;
-      for (int i = 0; i < pos-1; i++) {
-        n = n->next;
+      if (pos == 0 && head == NULL) {
+        head = newn;
       }
-      newn->next = n->next;
-      n->next = newn;
+      else if (pos == 0) {
+          newn->next = head; head = newn;
+      }
+      else {
+        pos = min(pos,size);
+        node * n = head;
+        for (int i = 0; i < pos-1; i++) {
+          n = n->next;
+        }
+        newn->next = n->next;
+        n->next = newn;
+      }
+      size++;
     }
 
     T get(int pos) {

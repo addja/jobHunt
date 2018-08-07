@@ -1,19 +1,19 @@
 #include<iostream>
 using namespace std;
 
-// useful for applications that go around a list
 
 template<class T>
-class circularLinkedList {
+class doublyLinkedList {
   private:
     struct node {
         node* next;
+        node* prev;
         T elem;
     };
     node* head;
     int size;
   public:
-    circularLinkedList() {
+    doublyLinkedList() {
       size = 0; head = NULL;
     }
 
@@ -28,12 +28,11 @@ class circularLinkedList {
       }
       else {
         node *n = head;
-        while (n->next != head) {
+        while (n->next != NULL) {
           n = n->next;
         }
-        n->next = newn;
+        n->next = newn; newn->prev = n;
       }
-      newn->next = head;
       newn->elem = elem;
       size++;
     }
@@ -46,23 +45,23 @@ class circularLinkedList {
       node* newn = new node;
       newn->elem = elem;
       if (pos == 0 && head == NULL) {
-        head = newn;
+        head = newn; return;
       }
       else if (pos == 0) {
         newn->next = head;
-        node * n = head;
-        while(n->next != head) n = n->next;
-        n->next = newn;
+        head->prev = newn;
         head = newn;
       }
       else {
         pos = min(pos,size);
         node * n = head;
-        for (int i = 0; i < pos-1; i++) {
-          n = n->next;
-        }
+        for (int i = 0; i < pos-1; i++) n = n->next;
         newn->next = n->next;
+        newn->prev = n;
         n->next = newn;
+        if (newn->next != NULL) {
+          newn->next->prev = newn;
+        }
       }
       size++;
     }
@@ -84,10 +83,8 @@ class circularLinkedList {
         delete head; head = NULL;
       }
       else if (pos == 0) {
-        node* n = head;
-        for (int i = 0; i < size; i++) n = n->next;
-        n->next = head->next;
-        node* old = head; head = n->next;
+        node* old = head; head = head->next;
+        head->prev = NULL;
         delete old;
       }
       else {
@@ -95,6 +92,7 @@ class circularLinkedList {
         for (int i = 0; i < pos-1; i++) n = n->next;
         old = n->next;
         n->next = old->next;
+        if (old->next != NULL) old->next->prev = n;
         delete old;
       }
       size--;
@@ -104,31 +102,30 @@ class circularLinkedList {
 
 int main() {
   int n; cin >> n;
-  circularLinkedList<int> cll; int tmp;
+  doublyLinkedList<int> dll; int tmp;
   for (int i = 0; i < n; i++) {
-    cin >> tmp; cll.push(tmp);
+    cin >> tmp; dll.push(tmp);
   }
-  cout << "Head of the list: " << cll.begin() << endl;
-  cout << "Size of the list: " << cll.listSize() << endl;
-  cout << "Inserting a 44 " << endl; cll.insert(5,44);
+  cout << "Head of the list: " << dll.begin() << endl;
+  cout << "Size of the list: " << dll.listSize() << endl;
+  cout << "Inserting a 44 " << endl; dll.insert(5,44);
   cout << "Elements of the list:";
-  for (int i = 0; i < cll.listSize(); i++) {
-    cout << " " << cll.get(i);
+  for (int i = 0; i < dll.listSize(); i++) {
+    cout << " " << dll.get(i);
   }
   cout << endl << "Deleting the 44 and adding to the end of the list" << endl;
-  cll.deleteElement(5); cll.insert(11115,44);
+  dll.deleteElement(5); dll.insert(11115,44);
   cout << "Elements of the list:";
-  for (int i = 0; i < cll.listSize(); i++) {
-    cout << " " << cll.get(i);
+  for (int i = 0; i < dll.listSize(); i++) {
+    cout << " " << dll.get(i);
   }
   cout << endl;
-
-  circularLinkedList<int> cll2;
-  cll2.push(2); cll2.deleteElement(0);
-  cll2.push(4); cll2.push(3); cll2.deleteElement(0);
+  doublyLinkedList<int> dll2;
+  dll2.push(2); dll2.deleteElement(0);
+  dll2.push(4); dll2.push(3); dll2.deleteElement(0);
   cout << "Elements of the list:";
-  for (int i = 0; i < cll2.listSize(); i++) {
-    cout << " " << cll2.get(i);
+  for (int i = 0; i < dll2.listSize(); i++) {
+    cout << " " << dll2.get(i);
   }
   cout << endl;
 }
