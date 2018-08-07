@@ -1,8 +1,10 @@
 #include<iostream>
 using namespace std;
 
+// useful for applications that go around a list
+
 template<class T>
-class linkedList {
+class circularLinkedList {
   private:
     struct node {
         node* next;
@@ -11,7 +13,7 @@ class linkedList {
     node* head;
     int size;
   public:
-    linkedList() {
+    circularLinkedList() {
       size = 0; head = NULL;
     }
 
@@ -26,12 +28,12 @@ class linkedList {
       }
       else {
         node *n = head;
-        while (n->next != NULL) {
+        while (n->next != head) {
           n = n->next;
         }
         n->next = newn;
       }
-      newn->next = NULL;
+      newn->next = head;
       newn->elem = elem;
       size++;
     }
@@ -69,6 +71,13 @@ class linkedList {
       if (pos == 0 && size == 1) {
         delete head; head = NULL;
       }
+      else if (pos == 0) {
+        node* n = head;
+        for (int i = 0; i < size; i++) n = n->next;
+        n->next = head->next;
+        node* old = head; head = n->next;
+        delete old;
+      }
       else {
         node* n = head; node* old;
         for (int i = 0; i < pos-1; i++) n = n->next;
@@ -83,22 +92,31 @@ class linkedList {
 
 int main() {
   int n; cin >> n;
-  linkedList<int> ll; int tmp;
+  circularLinkedList<int> cll; int tmp;
   for (int i = 0; i < n; i++) {
-    cin >> tmp; ll.push(tmp);
+    cin >> tmp; cll.push(tmp);
   }
-  cout << "Head of the list: " << ll.begin() << endl;
-  cout << "Size of the list: " << ll.listSize() << endl;
-  cout << "Inserting a 44 " << endl; ll.insert(5,44);
+  cout << "Head of the list: " << cll.begin() << endl;
+  cout << "Size of the list: " << cll.listSize() << endl;
+  cout << "Inserting a 44 " << endl; cll.insert(5,44);
   cout << "Elements of the list:";
-  for (int i = 0; i < ll.listSize(); i++) {
-    cout << " " << ll.get(i);
+  for (int i = 0; i < cll.listSize(); i++) {
+    cout << " " << cll.get(i);
   }
   cout << endl << "Deleting the 44 and adding to the end of the list" << endl;
-  ll.deleteElement(5); ll.insert(11115,44);
+  cll.deleteElement(5); cll.insert(11115,44);
   cout << "Elements of the list:";
-  for (int i = 0; i < ll.listSize(); i++) {
-    cout << " " << ll.get(i);
+  for (int i = 0; i < cll.listSize(); i++) {
+    cout << " " << cll.get(i);
+  }
+  cout << endl;
+
+  circularLinkedList<int> cll2;
+  cll2.push(2); cll2.deleteElement(0);
+  cll2.push(4); cll2.push(3); cll2.deleteElement(0);
+  cout << "Elements of the list:";
+  for (int i = 0; i < cll2.listSize(); i++) {
+    cout << " " << cll2.get(i);
   }
   cout << endl;
 }
