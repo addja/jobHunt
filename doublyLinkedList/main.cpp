@@ -9,6 +9,10 @@ class doublyLinkedList {
         node* next;
         node* prev;
         T elem;
+
+				node() {
+					next = prev = NULL;
+				}
     };
     node* head;
     int size;
@@ -45,7 +49,7 @@ class doublyLinkedList {
       node* newn = new node;
       newn->elem = elem;
       if (pos == 0 && head == NULL) {
-        head = newn; return;
+        head = newn;
       }
       else if (pos == 0) {
         newn->next = head;

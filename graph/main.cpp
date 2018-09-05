@@ -15,7 +15,7 @@ class graph {
 		void topoRec(int i, vector<bool> & visited, stack<int> & s) {
 			visited[i] = true;
 			for (int j = 0; j < nvertices; j++) {
-				if (!visited[j]) topoRec(j,visited,s);
+				if (!visited[j] && adj[i][j]) topoRec(j,visited,s);
 			}
 			s.push(i);
 		}

@@ -47,6 +47,7 @@ class circularLinkedList {
       newn->elem = elem;
       if (pos == 0 && head == NULL) {
         head = newn;
+				head->next = head;
       }
       else if (pos == 0) {
         newn->next = head;

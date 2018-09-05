@@ -98,7 +98,7 @@ void quickSort(vector<int> & v,int lo, int hi) {
 	int p = rand() % (hi-lo) + lo;	
 	int mid = pivot(v,lo,hi,v[p]);
 	quickSort(v,lo,mid-1);
-	quickSort(v,mid,hi);
+	quickSort(v,mid+1,hi);
 }
 
 void heapSort(vector<int> & v) {
